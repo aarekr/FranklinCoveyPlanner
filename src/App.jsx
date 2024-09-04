@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const App = () => {
   const [ tasks, setTasks ] = useState([])
-  const [ id, setID ] = useState(3)
+  //const [ id, setID ] = useState(3)
   const [ priority, setPriority ] = useState('')
   const [ number, setNumber ] = useState('')
   const [ newTask, setNewTask ] = useState('')
@@ -27,16 +27,21 @@ const App = () => {
   }
   const addNewTask = (event) => {
     event.preventDefault()
-    const newID = id + 1
-    setID(newID)
+    //const newID = id + 1
+    //setID(newID)
     const taskObject = {
-      id: newID,
       done: false,
       priority: priority,
       number: number,
       name: newTask,
     }
-    console.log("taskObject: ", taskObject.id, taskObject.done, taskObject.priority, taskObject.number, taskObject.name)
+    console.log("taskObject: ", taskObject.done, taskObject.priority, taskObject.number, taskObject.name)
+    axios
+      .post('http://localhost:3001/tasks', taskObject)
+      .then(response => {
+        setTasks(tasks.concat(response.data))
+      })
+
     setTasks(tasks.concat(taskObject))
     setPriority('')
     setNumber('')
@@ -44,9 +49,13 @@ const App = () => {
   }
   const setToDone = (id) => {
     console.log('marking done, id: ', id)
+    const url = `http://localhost:3001/tasks/${id}`
     const task = tasks.find(t => t.id === id)
     const changedTask = { ...task, done: !task.done}
-    setTasks(tasks.map(task => task.id !== id ? task : changedTask))
+    axios.put(url, changedTask)
+      .then(respose => {
+        setTasks(tasks.map(task => task.id !== id ? task : respose.data))
+      })
   }
 
   return(

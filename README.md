@@ -1,6 +1,6 @@
 # FranklinCoveyPlanner
 
-Franklin Covey Planner (React, Node, MongoDB)
+Time management application
 
 * Frontend: React
 * Backend: Node.js
