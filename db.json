@@ -1,0 +1,7 @@
+{
+    "tasks": [
+        { "id": 1, "done": false, "priority": "A", "number": 1, "name": "Java 1 kpl" },
+        { "id": 2, "done": false, "priority": "A", "number": 2, "name": "C# osa 1" },
+        { "id": 3, "done": false, "priority": "B", "number": 1, "name": "Lue 50 sivua" }
+    ]
+}

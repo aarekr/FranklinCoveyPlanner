@@ -1,17 +1,21 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import axios from 'axios'
 
 const App = () => {
-  const [ tasks, setTasks ] = useState(
-    [
-      { id: 1, done: false, priority: 'A', number: 1, name: 'Java 1 kpl' },
-      { id: 2, done: false, priority: 'A', number: 2, name: 'C# osa 1'},
-      { id: 3, done: false, priority: 'B', number: 1, name: 'Lue 50 sivua'}
-    ]
-  )
+  const [ tasks, setTasks ] = useState([])
   const [ id, setID ] = useState(3)
-  const [ priority, setPriority] = useState('')
+  const [ priority, setPriority ] = useState('')
   const [ number, setNumber ] = useState('')
   const [ newTask, setNewTask ] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/tasks')
+      .then(response => {
+        setTasks(response.data)
+      })
+  })
+
   const handleTaskChange = (event) => {
     setNewTask(event.target.value)
   }
