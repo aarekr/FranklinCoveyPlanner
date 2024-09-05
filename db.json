@@ -20,34 +20,6 @@
       "priority": "B",
       "number": 1,
       "name": "Lue 50 sivua"
-    },
-    {
-      "id": "2dda",
-      "done": true,
-      "priority": "C",
-      "number": "3",
-      "name": "Reenaa"
-    },
-    {
-      "id": "0246",
-      "done": true,
-      "priority": "D",
-      "number": "1",
-      "name": "Viides"
-    },
-    {
-      "id": "a4aa",
-      "done": false,
-      "priority": "D",
-      "number": "4",
-      "name": "Kuudes"
-    },
-    {
-      "id": "549f",
-      "done": false,
-      "priority": "D",
-      "number": "5",
-      "name": "Seitsemäs"
     }
   ]
 }
