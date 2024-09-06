@@ -68,15 +68,17 @@ const App = () => {
       <h1>Franklin Covey Planner</h1>
       <hr/>
       <h3>Prioritized Daily Tasks List</h3>
-      <ol>
-        {tasks.map(task => <li key={task.id}>
-          <button onClick={() => setToDone(task.id)}>mark done</button> {' '}
-          {task.done.toString()} {' '}
-          {task.priority}
-          {task.number} 
-          : {task.name}</li>
-        )}
-      </ol>
+      <table border="5.0">
+        <tbody>
+          {tasks.map(task => <tr key={task.id}>
+            <td align="center"><button onClick={() => setToDone(task.id)}>mark done</button></td>
+            <td width="50" align="center">{task.done.toString()} </td>
+            <td width="30" align="center">{task.priority}</td>
+            <td width="30" align="center">{task.number}</td>
+            <td width="250">{task.name}</td>
+          </tr>)}
+        </tbody>
+      </table>
       <Notification message={message} />
       <hr />
       <h3>Add a new task</h3>
