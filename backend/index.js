@@ -1,77 +1,80 @@
 const express = require('express')
 const app = express()
+require('dotenv').config()
 
+const mongoose = require('mongoose')
+
+const Task = require('./models/task')
+
+const cors = require('cors')
+app.use(cors())
 app.use(express.json())
 
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
 }
 
-let tasks = [
-    {
-        "id": 1,
-        "done": false,
-        "priority": "A",
-        "number": 1,
-        "name": "Java 1 kpl"
-    },
-    {
-        "id": 2,
-        "done": true,
-        "priority": "A",
-        "number": 2,
-        "name": "C# osa 1"
-    },
-    {
-        "id": 3,
-        "done": false,
-        "priority": "B",
-        "number": 1,
-        "name": "Lue 50 sivua"
-    }
-]
-
 app.get('/', (request, response) => {
     response.send('<h1>Franklin Covey Planner</h1>')
 })
 
 app.get('/api/tasks', (request, response) => {
-    response.json(tasks)
+    Task.find({}).then(tasks => {
+        response.json(tasks)
+    })
 })
 
 app.get('/api/tasks/:id', (request, response) => {
-    const id = request.params.id
-    const task = tasks.find(note => note.id === id)
-    if (task) {
+    Task.findById(request.params.id).then(task => {
         response.json(task)
-    } else {
-        response.status(404).end()
-    }
+    })
 })
 
-let taskID = 4
 app.post('/api/tasks', (request, response) => {
-    const task = request.body
-    if (!task.name) {
+    const body = request.body
+    if (!body.name) {
         return response.status(400).json({
             error: 'Task name is missing'
         })
     }
-    task.id = taskID
-    taskID++
-    tasks = tasks.concat(task)
-    response.json(task)
+    const task = new Task({
+        done: body.done,
+        priority: body.priority,
+        number: body.numer,
+        name: body.name
+    })
+    task.save().then(result => {
+        response.json(result)
+    })
 })
 
-app.delete('/api/tasks/:id', (request, response) => {
-    const id = request.params.id
-    tasks = tasks.filter(task => task.id !== id)
-    response.status(204).end()
+// update
+app.put('/api/tasks/:id', (request, response, next) => {
+    const body = request.body
+    const task = {
+        done: body.done,
+        priority: body.priority,
+        number: body.numer,
+        name: body.name
+    }
+    Task.findByIdAndUpdate(request.params.id, task, { new: true })
+        .then(result => {
+            response.json(result)
+        })
+        .catch(error => next(error))
+})
+
+app.delete('/api/tasks/:id', (request, response, next) => {
+    Task.findByIdAndDelete(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => next(error))
 })
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
