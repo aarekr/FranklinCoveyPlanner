@@ -2,79 +2,104 @@ const express = require('express')
 const app = express()
 require('dotenv').config()
 
-const mongoose = require('mongoose')
-
 const Task = require('./models/task')
 
 const cors = require('cors')
 app.use(cors())
 app.use(express.json())
 
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: error.message })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+  next(error)
+}
+
 const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.get('/', (request, response) => {
-    response.send('<h1>Franklin Covey Planner</h1>')
+  response.send('<h1>Franklin Covey Planner</h1>')
 })
 
 app.get('/api/tasks', (request, response) => {
-    Task.find({}).then(tasks => {
-        response.json(tasks)
-    })
+  Task.find({}).then(tasks => {
+    response.json(tasks)
+  })
 })
 
 app.get('/api/tasks/:id', (request, response) => {
-    Task.findById(request.params.id).then(task => {
+  Task.findById(request.params.id)
+    .then(task => {
+      if (task) {
         response.json(task)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(400).send({ error: 'id is not correct' })
     })
 })
 
-app.post('/api/tasks', (request, response) => {
-    const body = request.body
-    if (!body.name) {
-        return response.status(400).json({
-            error: 'Task name is missing'
-        })
-    }
-    const task = new Task({
-        done: body.done,
-        priority: body.priority,
-        number: body.numer,
-        name: body.name
+app.post('/api/tasks', (request, response, next) => {
+  const body = request.body
+  if (!body.name) {
+    return response.status(400).json({
+      error: 'Task name is missing'
     })
-    task.save().then(result => {
-        response.json(result)
+  }
+  if (!body.priority) {
+    return response.status(400).json({
+      error: 'Task priority is missing'
     })
+  }
+  const task = new Task({
+    done: body.done,
+    priority: body.priority,
+    number: body.number,
+    name: body.name
+  })
+  task.save()
+    .then(result => {
+      response.json(result)
+    })
+    .catch(error => next(error))
 })
 
 // update
 app.put('/api/tasks/:id', (request, response, next) => {
-    const body = request.body
-    const task = {
-        done: body.done,
-        priority: body.priority,
-        number: body.numer,
-        name: body.name
-    }
-    Task.findByIdAndUpdate(request.params.id, task, { new: true })
-        .then(result => {
-            response.json(result)
-        })
-        .catch(error => next(error))
+  const body = request.body
+  const task = {
+    done: body.done,
+    priority: body.priority,
+    number: body.number,
+    name: body.name
+  }
+  Task.findByIdAndUpdate(request.params.id, task, { new: true })
+    .then(result => {
+      response.json(result)
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/tasks/:id', (request, response, next) => {
-    Task.findByIdAndDelete(request.params.id)
-        .then(result => {
-            response.status(204).end()
-        })
-        .catch(error => next(error))
+  Task.findByIdAndDelete(request.params.id)
+    .then(() => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.use(unknownEndpoint)
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })

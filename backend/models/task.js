@@ -2,18 +2,27 @@ const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 
 mongoose.connect(process.env.MONGODB_URI)
-  .then(result => {
-    console.log('connected to MongoDB')
+  .then(() => {
+    console.log('connected to MongoDB ')
   })
   .catch((error) => {
     console.log('error connecting to MongoDB:', error.message)
   })
 
 const taskSchema = new mongoose.Schema({
-    done: Boolean,
-    priority: String,
-    number: Number,
-    name: String,
+  done: Boolean,
+  priority: {
+    type: String,
+    minlength: 1,
+    maxlength: 1,
+    required: true,
+  },
+  number: Number,
+  name: {
+    type: String,
+    minlength: 1,
+    required: true,
+  },
 })
 
 taskSchema.set('toJSON', {

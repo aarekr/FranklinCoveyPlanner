@@ -68,10 +68,27 @@ const App = () => {
       <h1>Franklin Covey Planner</h1>
       <hr/>
       <h3>Prioritized Daily Tasks List</h3>
+      <h4>Today's tasks</h4>
       <table border="5.0">
         <tbody>
-          {tasks.map(task => <tr key={task.id}>
-            <td align="center"><button onClick={() => setToDone(task.id)}>mark done</button></td>
+          {tasks
+            .filter(task => task.done === false)
+            .sort((a,b) => b.letter - a.letter ? 1 : -1)
+            .sort((a,b) => b.number - a.number ? -1 : 1)
+            .map(task => <tr key={task.id}>
+            <td width="100"align="center"><button onClick={() => setToDone(task.id)}>mark done</button></td>
+            <td width="50" align="center">{task.done.toString()} </td>
+            <td width="30" align="center">{task.priority}</td>
+            <td width="30" align="center">{task.number}</td>
+            <td width="250">{task.name}</td>
+          </tr>)}
+        </tbody>
+      </table>
+      <h4>Today's completed tasks</h4>
+      <table border="5.0">
+        <tbody>
+          {tasks.filter(task => task.done === true).map(task => <tr key={task.id}>
+            <td width="100"align="center"><button onClick={() => setToDone(task.id)}>mark undone</button></td>
             <td width="50" align="center">{task.done.toString()} </td>
             <td width="30" align="center">{task.priority}</td>
             <td width="30" align="center">{task.number}</td>
@@ -80,6 +97,7 @@ const App = () => {
         </tbody>
       </table>
       <Notification message={message} />
+      <br />
       <hr />
       <h3>Add a new task</h3>
       <form onSubmit={addNewTask}>
