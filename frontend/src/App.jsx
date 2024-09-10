@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import taskService from './services/tasks'
 import { Notification } from "./components/Notification"
+import Task from "./components/Task"
 
 const App = () => {
   const [ tasks, setTasks ] = useState([])
@@ -71,29 +72,33 @@ const App = () => {
       <h4>Today&apos;s tasks</h4>
       <table border="5.0">
         <tbody>
-          {tasks
-            .filter(task => task.done === false)
-            .sort((a,b) => b.letter - a.letter ? 1 : -1)
-            .sort((a,b) => b.number - a.number ? -1 : 1)
-            .map(task => <tr key={task.id}>
-            <td width="100"align="center"><button onClick={() => setToDone(task.id)}>mark done</button></td>
-            <td width="50" align="center">{task.done.toString()} </td>
-            <td width="30" align="center">{task.priority}</td>
-            <td width="30" align="center">{task.number}</td>
-            <td width="250">{task.name}</td>
-          </tr>)}
+          {tasks.filter(task => task.done === false).map(task =>
+            <Task
+              key={task.id}
+              setToDone={setToDone}
+              id={task.id}
+              done={task.done.toString()}
+              priority={task.priority}
+              number={task.number}
+              name={task.name}
+              text={'mark done'} />
+          )}
         </tbody>
       </table>
       <h4>Today&apos;s completed tasks</h4>
       <table border="5.0">
         <tbody>
-          {tasks.filter(task => task.done === true).map(task => <tr key={task.id}>
-            <td width="100"align="center"><button onClick={() => setToDone(task.id)}>mark undone</button></td>
-            <td width="50" align="center">{task.done.toString()} </td>
-            <td width="30" align="center">{task.priority}</td>
-            <td width="30" align="center">{task.number}</td>
-            <td width="250">{task.name}</td>
-          </tr>)}
+          {tasks.filter(task => task.done === true).map(task =>
+            <Task
+              key={task.id}
+              setToDone={setToDone}
+              id={task.id}
+              done={task.done.toString()}
+              priority={task.priority}
+              number={task.number}
+              name={task.name}
+              text={'mark undone'} />
+          )}
         </tbody>
       </table>
       <Notification message={message} />
