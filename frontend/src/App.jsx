@@ -68,7 +68,7 @@ const App = () => {
       <h1>Franklin Covey Planner</h1>
       <hr/>
       <h3>Prioritized Daily Tasks List</h3>
-      <h4>Today's tasks</h4>
+      <h4>Today&apos;s tasks</h4>
       <table border="5.0">
         <tbody>
           {tasks
@@ -84,7 +84,7 @@ const App = () => {
           </tr>)}
         </tbody>
       </table>
-      <h4>Today's completed tasks</h4>
+      <h4>Today&apos;s completed tasks</h4>
       <table border="5.0">
         <tbody>
           {tasks.filter(task => task.done === true).map(task => <tr key={task.id}>

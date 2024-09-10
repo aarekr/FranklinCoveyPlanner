@@ -7,8 +7,16 @@ Time management application
 * Database: MongoDB
 
 ## Testing
+#### Frontend:
+
 #### Backend:
 * SuperTest:
 ```bash
 npm test
+```
+
+## Lint
+* Run ESLint with:
+```bash
+npm run lint
 ```
