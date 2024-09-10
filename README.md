@@ -8,7 +8,7 @@ Time management application
 
 ## Testing
 #### Backend:
-* Jest:
+* SuperTest:
 ```bash
 npm test
 ```
