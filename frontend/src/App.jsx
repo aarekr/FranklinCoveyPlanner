@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import taskService from './services/tasks'
 import { Notification } from "./components/Notification"
 import Task from "./components/Task"
+import NewTaskForm from "./components/NewTaskForm"
 
 const App = () => {
   const [ tasks, setTasks ] = useState([])
@@ -105,25 +106,9 @@ const App = () => {
       <br />
       <hr />
       <h3>Add a new task</h3>
-      <form onSubmit={addNewTask}>
-        <table>
-          <tbody>
-            <tr>
-              <td>Task:</td>
-              <td><input value={newTask} onChange={handleTaskChange} /></td>
-            </tr>
-            <tr>
-              <td>Priority:</td>
-              <td><input value={priority} onChange={handlePriorityChange} /></td>
-            </tr>
-            <tr>
-              <td>Number:</td>
-              <td><input value={number} onChange={handleNumberChange} /></td>
-            </tr>
-          </tbody>
-        </table>
-        <button type='submit'>Add task</button>
-      </form>
+      <NewTaskForm newTask={newTask} priority={priority} number={number}
+        addNewTask={addNewTask} handleTaskChange={handleTaskChange}
+        handlePriorityChange={handlePriorityChange} handleNumberChange={handleNumberChange} />
     </div>
   )
 }
