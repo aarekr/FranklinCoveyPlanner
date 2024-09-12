@@ -51,7 +51,6 @@ const App = () => {
       })
   }
   const setToDone = (id) => {
-    console.log('marking done, id: ', id)
     const task = tasks.find(t => t.id === id)
     const changedTask = { ...task, done: !task.done}
     taskService
@@ -105,7 +104,6 @@ const App = () => {
       <Notification message={message} />
       <br />
       <hr />
-      <h3>Add a new task</h3>
       <NewTaskForm newTask={newTask} priority={priority} number={number}
         addNewTask={addNewTask} handleTaskChange={handleTaskChange}
         handlePriorityChange={handlePriorityChange} handleNumberChange={handleNumberChange} />

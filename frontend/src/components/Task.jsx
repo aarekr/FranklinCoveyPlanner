@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 const Task = ({ setToDone, id, done, priority, number, name, text }) => {
 
    return (
