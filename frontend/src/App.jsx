@@ -73,32 +73,42 @@ const App = () => {
       <h4>Today&apos;s tasks</h4>
       <Table striped>
         <tbody>
-          {tasks.filter(task => task.done === false).map(task =>
-            <Task
-              key={task.id}
-              setToDone={setToDone}
-              id={task.id}
-              done={task.done.toString()}
-              priority={task.priority}
-              number={task.number}
-              name={task.name}
-              text={'mark done'} />
+          {tasks
+            .filter(task => task.done === false)
+            .sort((a,b) => a.number < b.number ? 1 : -1)
+            .sort((a,b) => a.priority > b.priority ? 1 : -1)
+            .map(task =>
+              <Task
+                key={task.id}
+                setToDone={setToDone}
+                id={task.id}
+                done={task.done.toString()}
+                priority={task.priority}
+                number={task.number}
+                name={task.name}
+                text={'mark done'}
+              />
           )}
         </tbody>
       </Table>
       <h4>Today&apos;s completed tasks</h4>
       <Table striped>
         <tbody>
-          {tasks.filter(task => task.done === true).map(task =>
-            <Task
-              key={task.id}
-              setToDone={setToDone}
-              id={task.id}
-              done={task.done.toString()}
-              priority={task.priority}
-              number={task.number}
-              name={task.name}
-              text={'mark undone'} />
+          {tasks
+            .filter(task => task.done === true)
+            .sort((a,b) => a.number < b.number ? 1 : -1)
+            .sort((a,b) => a.priority > b.priority ? 1 : -1)
+            .map(task =>
+              <Task
+                key={task.id}
+                setToDone={setToDone}
+                id={task.id}
+                done={task.done.toString()}
+                priority={task.priority}
+                number={task.number}
+                name={task.name}
+                text={'mark undone'}
+              />
           )}
         </tbody>
       </Table>
