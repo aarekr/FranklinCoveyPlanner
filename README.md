@@ -7,7 +7,7 @@ Time management application
 * Database: MongoDB
 * UI-framework: Bootstrap
 * Frontend testing: Vitest
-* Backend testing: SuperTeset
+* Backend testing: SuperTest
 * End-to-end testing: Playwright
 
 ## Testing

@@ -3,6 +3,7 @@ import taskService from './services/tasks'
 import { Notification } from "./components/Notification"
 import Task from "./components/Task"
 import NewTaskForm from "./components/NewTaskForm"
+import { Table } from "react-bootstrap"
 
 const App = () => {
   const [ tasks, setTasks ] = useState([])
@@ -65,12 +66,12 @@ const App = () => {
   }
 
   return(
-    <div>
+    <div className="container">
       <h1>Franklin Covey Planner</h1>
       <hr/>
-      <h3>Prioritized Daily Tasks List</h3>
+      <h3>Prioritized Daily Tasks List</h3> <br />
       <h4>Today&apos;s tasks</h4>
-      <table border="5.0">
+      <Table striped>
         <tbody>
           {tasks.filter(task => task.done === false).map(task =>
             <Task
@@ -84,9 +85,9 @@ const App = () => {
               text={'mark done'} />
           )}
         </tbody>
-      </table>
+      </Table>
       <h4>Today&apos;s completed tasks</h4>
-      <table border="5.0">
+      <Table striped>
         <tbody>
           {tasks.filter(task => task.done === true).map(task =>
             <Task
@@ -100,7 +101,7 @@ const App = () => {
               text={'mark undone'} />
           )}
         </tbody>
-      </table>
+      </Table>
       <Notification message={message} />
       <br />
       <hr />
