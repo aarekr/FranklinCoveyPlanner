@@ -7,7 +7,7 @@ const NewTaskForm = ({ newTask, priority, number, addNewTask, handleTaskChange,
     return (
       <div>
         <h3>Add new tasks</h3>
-        <Form onSubmit={addNewTask}>
+        <Form onSubmit={addNewTask} className="textfield-width">
           <Form.Group>
             <Form.Label>Task:</Form.Label>
             <Form.Control

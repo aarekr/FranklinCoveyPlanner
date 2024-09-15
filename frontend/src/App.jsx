@@ -64,6 +64,19 @@ const App = () => {
         }, 3000)
       })
   }
+  const setNewTaskName = (id, newName) => {
+    const task = tasks.find(t => t.id === id)
+    const changedTask = { ...task, name: newName}
+    taskService
+      .update(id, changedTask)
+      .then(response => {
+        setTasks(tasks.map(task => task.id !== id ? task : response.data))
+        setMessage(`Task name changed to ${newName}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
+      })
+  }
 
   return(
     <div className="container">
@@ -90,7 +103,7 @@ const App = () => {
               />
           )}
         </tbody>
-      </Table>
+      </Table><br />
       <h4>Today&apos;s completed tasks</h4>
       <Table striped>
         <tbody>
