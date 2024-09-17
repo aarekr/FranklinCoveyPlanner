@@ -51,6 +51,19 @@ const App = () => {
         setNewTask('')
       })
   }
+  /*const deleteTask = (id) => {
+    console.log("deleteTask: ", id)
+    taskService
+      .deleteTask(id)
+      .then(response => {
+        setTasks(tasks.concat(response.data))
+        setMessage('Task deleted from the list')
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
+      })
+    console.log("Tasks after deletion: ", tasks)
+  }*/
   const setToDone = (id) => {
     const task = tasks.find(t => t.id === id)
     const changedTask = { ...task, done: !task.done}
@@ -100,6 +113,8 @@ const App = () => {
                 number={task.number}
                 name={task.name}
                 text={'mark done'}
+                tasks={tasks}
+                setTasks={setTasks}
               />
           )}
         </tbody>
@@ -121,6 +136,8 @@ const App = () => {
                 number={task.number}
                 name={task.name}
                 text={'mark undone'}
+                tasks={tasks}
+                setTasks={setTasks}
               />
           )}
         </tbody>

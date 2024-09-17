@@ -4,23 +4,37 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Badge } from 'react-bootstrap';
+import taskService from '../services/tasks'
 
-const ModifyTaskModal = ({ name, done, id, setToDone, text }) => {
-  const [show, setShow] = useState(false);
-  const handleShow = () => setShow(true);
+const ModifyTaskModal = ({ name, done, id, setToDone, text, tasks, setTasks }) => {
+  const [showModal, setShowModal] = useState(false);
+  const handleShow = () => setShowModal(true);
 
   const handleSaveAndClose = () => {
     console.log("saving and closing")
-    setShow(false)
+    setShowModal(false)
   }
   const handleCloseWithoutSaving = () => {
     console.log("closing without saving")
-    setShow(false)
+    setShowModal(false)
   }
-  const handleDeleteAndClose = () => {
+  const handleDeleteAndClose = (id) => {
+    //console.log(event.target.value)
     let confirmDeletion = window.confirm('Are you sure you want to delete this task?')
-    console.log("deleting task: ", confirmDeletion)
-    setShow(false)
+    if (confirmDeletion) {
+      console.log("deleting task: ", confirmDeletion)
+      taskService
+        .deleteTask(id)
+        .then(response => {
+          if (response.status == 204) {
+            console.log("task removed from database")
+            taskService.getAll().then(response => {
+              setTasks(response.data)
+            })
+          }
+        })
+      setShowModal(false)
+    }
   }
   const handleTaskChange = (event) => {
     console.log(event.target.value)
@@ -31,7 +45,7 @@ const ModifyTaskModal = ({ name, done, id, setToDone, text }) => {
   return (
     <>
       <Button variant="primary" size="sm" onClick={handleShow}>modify</Button>
-      <Modal show={show}>
+      <Modal show={showModal}>
         <Modal.Header closeButton>
           <Modal.Title>Modifying task: {name}</Modal.Title>
         </Modal.Header>
@@ -44,7 +58,7 @@ const ModifyTaskModal = ({ name, done, id, setToDone, text }) => {
         <Modal.Footer>
           <Button variant="primary" onClick={handleSaveAndClose}>Save Changes</Button>
           <Button variant="secondary" onClick={handleCloseWithoutSaving}>Cancel</Button>
-          <Button variant="danger" onClick={handleDeleteAndClose}>Delete task</Button>
+          <Button variant="danger" onClick={() => handleDeleteAndClose(id)}>Delete task</Button>
         </Modal.Footer>
       </Modal>
     </>

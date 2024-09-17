@@ -13,4 +13,9 @@ const update = (id, newObject) => {
   return axios.put(`${baseUrl}/${id}`, newObject)
 }
 
-export default { getAll, create, update }
+const deleteTask = (id) => {
+  console.log("tasks.js deleteTask: ", id)
+  return axios.delete(`${baseUrl}/${id}`)
+}
+
+export default { getAll, create, update, deleteTask }

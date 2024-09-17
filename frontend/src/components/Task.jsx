@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import Badge from 'react-bootstrap/Badge'
 import ModifyTaskModal from './ModifyTaskModal'
 
-const Task = ({ setToDone, id, done, priority, number, name, text, newTask, setNewTask, setNewTaskName }) => {
+const Task = ({ setToDone, id, done, priority, number, name, text, tasks, setTasks }) => {
 
     return (
         <tr className="task">
@@ -18,7 +18,7 @@ const Task = ({ setToDone, id, done, priority, number, name, text, newTask, setN
             <td width="250" className="task">{name}</td>
             <td width="100" align="right">
                 <ModifyTaskModal name={name} done={done} id={id} setToDone={setToDone} text={text}
-                    newTask={newTask} setNewTask={setNewTask} setNewTaskName={setNewTaskName} />
+                    tasks={tasks} setTasks={setTasks} />
             </td>
         </tr>
    )
