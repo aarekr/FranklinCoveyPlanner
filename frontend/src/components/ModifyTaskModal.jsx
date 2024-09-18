@@ -6,12 +6,20 @@ import Modal from 'react-bootstrap/Modal';
 import { Badge } from 'react-bootstrap';
 import taskService from '../services/tasks'
 
-const ModifyTaskModal = ({ name, done, id, setToDone, text, tasks, setTasks }) => {
-  const [showModal, setShowModal] = useState(false);
+const ModifyTaskModal = ({ name, done, id, setToDone, text, priority, number, tasks, setTasks,
+  handleTaskChange, 
+ }) => {
+  const [ showModal, setShowModal ] = useState(false);
+  const [ newTaskName, setNewTaskName ] = useState('')
+  const [ newTaskPriority, setNewTaskPriority ] = useState('')
   const handleShow = () => setShowModal(true);
 
   const handleSaveAndClose = () => {
-    console.log("saving and closing")
+    console.log("saving and closing: ")
+    console.log("   ---> newTaskName    : ", newTaskName)
+    console.log("   ---> newTaskPriority: ", newTaskPriority)
+    //setPriority(newTaskPriority)
+    changeTaskPriority(newTaskPriority)
     setShowModal(false)
   }
   const handleCloseWithoutSaving = () => {
@@ -36,11 +44,28 @@ const ModifyTaskModal = ({ name, done, id, setToDone, text, tasks, setTasks }) =
       setShowModal(false)
     }
   }
-  const handleTaskChange = (event) => {
+
+  /*const handleTaskChange = (event) => {
     console.log(event.target.value)
     //setNewTask(event.target.value)
+  }*/
+  const handlePriorityChange = (event) => {
+    console.log(event.target.value)
+    setNewTaskPriority(event.target.value)
   }
-  let newTaskName = ''  // import this from App
+  const handleNumberChange = (event) => {
+    console.log(event.target.value)
+  }
+
+  const changeTaskPriority = (newTaskPriority) => {
+    const task = tasks.find(t => t.id === id)
+    const changedTask = { ...task, priority: newTaskPriority}
+    taskService
+      .update(id, changedTask)
+      .then(response => {
+        setTasks(tasks.map(task => task.id !== id ? task : response.data))
+      })
+  }
 
   return (
     <>
@@ -49,8 +74,12 @@ const ModifyTaskModal = ({ name, done, id, setToDone, text, tasks, setTasks }) =
         <Modal.Header closeButton>
           <Modal.Title>Modifying task: {name}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Name: <input type="text" value={newTaskName} onChange={handleTaskChange}></input></Modal.Body>
-        
+        <Modal.Body>Name: <input type="text" value={newTaskName} placeholder={name}
+                                  onChange={handleTaskChange}></input></Modal.Body>
+        <Modal.Body>Priority: <input type="text" value={newTaskPriority} placeholder={priority}
+                                  onChange={handlePriorityChange}></input></Modal.Body>
+        <Modal.Body>Number: <input type="text" placeholder={number}
+                                  onChange={handleNumberChange}></input></Modal.Body>
         <Modal.Body>Status: {done == 'true'
                 ? <Badge bg="success">done</Badge>
                 : <Badge bg="danger">undone</Badge>}</Modal.Body>

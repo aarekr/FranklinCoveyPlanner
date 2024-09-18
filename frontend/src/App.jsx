@@ -51,19 +51,6 @@ const App = () => {
         setNewTask('')
       })
   }
-  /*const deleteTask = (id) => {
-    console.log("deleteTask: ", id)
-    taskService
-      .deleteTask(id)
-      .then(response => {
-        setTasks(tasks.concat(response.data))
-        setMessage('Task deleted from the list')
-        setTimeout(() => {
-          setMessage(null)
-        }, 3000)
-      })
-    console.log("Tasks after deletion: ", tasks)
-  }*/
   const setToDone = (id) => {
     const task = tasks.find(t => t.id === id)
     const changedTask = { ...task, done: !task.done}
@@ -72,19 +59,6 @@ const App = () => {
       .then(response => {
         setTasks(tasks.map(task => task.id !== id ? task : response.data))
         task.done ? setMessage(`Task changed to: done`) : setMessage(`Task changed to: undone`)
-        setTimeout(() => {
-          setMessage(null)
-        }, 3000)
-      })
-  }
-  const setNewTaskName = (id, newName) => {
-    const task = tasks.find(t => t.id === id)
-    const changedTask = { ...task, name: newName}
-    taskService
-      .update(id, changedTask)
-      .then(response => {
-        setTasks(tasks.map(task => task.id !== id ? task : response.data))
-        setMessage(`Task name changed to ${newName}`)
         setTimeout(() => {
           setMessage(null)
         }, 3000)
@@ -115,6 +89,7 @@ const App = () => {
                 text={'mark done'}
                 tasks={tasks}
                 setTasks={setTasks}
+                handleTaskChange={handleTaskChange}
               />
           )}
         </tbody>
@@ -138,6 +113,7 @@ const App = () => {
                 text={'mark undone'}
                 tasks={tasks}
                 setTasks={setTasks}
+                handleTaskChange={handleTaskChange}
               />
           )}
         </tbody>
