@@ -80,16 +80,15 @@ const App = () => {
             .map(task =>
               <Task
                 key={task.id}
-                setToDone={setToDone}
                 id={task.id}
-                done={task.done.toString()}
+                name={task.name}
                 priority={task.priority}
                 number={task.number}
-                name={task.name}
+                done={task.done.toString()}
+                setToDone={setToDone}
                 text={'mark done'}
                 tasks={tasks}
                 setTasks={setTasks}
-                handleTaskChange={handleTaskChange}
               />
           )}
         </tbody>
@@ -104,16 +103,15 @@ const App = () => {
             .map(task =>
               <Task
                 key={task.id}
-                setToDone={setToDone}
                 id={task.id}
-                done={task.done.toString()}
+                name={task.name}
                 priority={task.priority}
                 number={task.number}
-                name={task.name}
+                done={task.done.toString()}
+                setToDone={setToDone}
                 text={'mark undone'}
                 tasks={tasks}
                 setTasks={setTasks}
-                handleTaskChange={handleTaskChange}
               />
           )}
         </tbody>

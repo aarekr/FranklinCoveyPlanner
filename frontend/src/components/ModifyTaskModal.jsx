@@ -6,20 +6,16 @@ import Modal from 'react-bootstrap/Modal';
 import { Badge } from 'react-bootstrap';
 import taskService from '../services/tasks'
 
-const ModifyTaskModal = ({ name, done, id, setToDone, text, priority, number, tasks, setTasks,
-  handleTaskChange, 
- }) => {
+const ModifyTaskModal = ({ id, name, priority, number, done, setToDone, text, tasks, setTasks }) => {
   const [ showModal, setShowModal ] = useState(false);
   const [ newTaskName, setNewTaskName ] = useState('')
   const [ newTaskPriority, setNewTaskPriority ] = useState('')
+  const [ newTaskNumber, setNewTaskNumber ] = useState('')
   const handleShow = () => setShowModal(true);
 
   const handleSaveAndClose = () => {
     console.log("saving and closing: ")
-    console.log("   ---> newTaskName    : ", newTaskName)
-    console.log("   ---> newTaskPriority: ", newTaskPriority)
-    //setPriority(newTaskPriority)
-    changeTaskPriority(newTaskPriority)
+    changeTaskItems(newTaskName, newTaskPriority, newTaskNumber)
     setShowModal(false)
   }
   const handleCloseWithoutSaving = () => {
@@ -27,7 +23,6 @@ const ModifyTaskModal = ({ name, done, id, setToDone, text, priority, number, ta
     setShowModal(false)
   }
   const handleDeleteAndClose = (id) => {
-    //console.log(event.target.value)
     let confirmDeletion = window.confirm('Are you sure you want to delete this task?')
     if (confirmDeletion) {
       console.log("deleting task: ", confirmDeletion)
@@ -45,21 +40,23 @@ const ModifyTaskModal = ({ name, done, id, setToDone, text, priority, number, ta
     }
   }
 
-  /*const handleTaskChange = (event) => {
-    console.log(event.target.value)
-    //setNewTask(event.target.value)
-  }*/
+  const handleTaskChange = (event) => {
+    setNewTaskName(event.target.value)
+  }
   const handlePriorityChange = (event) => {
-    console.log(event.target.value)
     setNewTaskPriority(event.target.value)
   }
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
+    setNewTaskNumber(event.target.value)
   }
 
-  const changeTaskPriority = (newTaskPriority) => {
+  const changeTaskItems = (newTaskName, newTaskPriority, newTaskNumber) => {
+    console.log("changeTaskItems: ", newTaskName, newTaskPriority == '')
+    if (newTaskName == '') newTaskName = name
+    if (newTaskPriority == '') newTaskPriority = priority
+    if (newTaskNumber == '') newTaskNumber = number
     const task = tasks.find(t => t.id === id)
-    const changedTask = { ...task, priority: newTaskPriority}
+    const changedTask = { ...task, name: newTaskName, priority: newTaskPriority, number: newTaskNumber}
     taskService
       .update(id, changedTask)
       .then(response => {
