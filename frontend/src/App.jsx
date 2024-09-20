@@ -12,6 +12,10 @@ const App = () => {
   const [ newTask, setNewTask ] = useState('')
   const [ message, setMessage ] = useState('')
 
+  const now = new Date()
+  const dateSplit = now.toString().split(" ")
+  const dateToday = `${dateSplit[1]} ${dateSplit[2]}`
+
   useEffect(() => {
     taskService
       .getAll()
@@ -36,8 +40,10 @@ const App = () => {
       priority: priority,
       number: number,
       name: newTask,
+      date: dateToday,
     }
-    console.log("taskObject: ", taskObject.done, taskObject.priority, taskObject.number, taskObject.name)
+    console.log("taskObject: ", taskObject.done, taskObject.priority, taskObject.number, 
+      taskObject.name, taskObject.date)
     taskService
       .create(taskObject)
       .then(response => {
@@ -58,7 +64,7 @@ const App = () => {
       .update(id, changedTask)
       .then(response => {
         setTasks(tasks.map(task => task.id !== id ? task : response.data))
-        task.done ? setMessage(`Task changed to: done`) : setMessage(`Task changed to: undone`)
+        task.done ? setMessage(`Task changed to: undone`) : setMessage(`Task changed to: done`)
         setTimeout(() => {
           setMessage(null)
         }, 3000)
@@ -97,7 +103,7 @@ const App = () => {
       <Table striped>
         <tbody>
           {tasks
-            .filter(task => task.done === true)
+            .filter(task => task.done === true) //  && task.date == dateToday
             .sort((a,b) => a.number < b.number ? 1 : -1)
             .sort((a,b) => a.priority > b.priority ? 1 : -1)
             .map(task =>
@@ -118,6 +124,10 @@ const App = () => {
       </Table>
       <Notification message={message} />
       <br />
+      <p>Tasks of earlier days:</p>
+      {tasks
+        .filter(task => task.done != false && task.date != '')
+        .map(task => <li key={task.id}>{task.name} - {task.date}</li>)}
       <hr />
       <NewTaskForm newTask={newTask} priority={priority} number={number}
         addNewTask={addNewTask} handleTaskChange={handleTaskChange}

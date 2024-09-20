@@ -25,6 +25,10 @@ const taskSchema = new mongoose.Schema({
     minlength: 1,
     required: true,
   },
+  date: {
+    type: String,
+    required: true,
+  }
 })
 
 taskSchema.set('toJSON', {
