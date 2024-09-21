@@ -40,10 +40,11 @@ const App = () => {
       priority: priority,
       number: number,
       name: newTask,
-      date: dateToday,
+      dateCreated: dateToday,
+      dateCompleted: 'NA',
     }
     console.log("taskObject: ", taskObject.done, taskObject.priority, taskObject.number, 
-      taskObject.name, taskObject.date)
+      taskObject.name, taskObject.dateCreated, taskObject.dateCompleted)
     taskService
       .create(taskObject)
       .then(response => {
@@ -59,7 +60,7 @@ const App = () => {
   }
   const setToDone = (id) => {
     const task = tasks.find(t => t.id === id)
-    const changedTask = { ...task, done: !task.done}
+    const changedTask = { ...task, done: !task.done, dateCompleted: dateToday}
     taskService
       .update(id, changedTask)
       .then(response => {
@@ -103,7 +104,7 @@ const App = () => {
       <Table striped>
         <tbody>
           {tasks
-            .filter(task => task.done === true) //  && task.date == dateToday
+            .filter(task => task.done === true && task.dateCompleted == dateToday)
             .sort((a,b) => a.number < b.number ? 1 : -1)
             .sort((a,b) => a.priority > b.priority ? 1 : -1)
             .map(task =>
@@ -124,10 +125,14 @@ const App = () => {
       </Table>
       <Notification message={message} />
       <br />
+      <p>All tasks</p>
+      <ul>
+        {tasks.map(task => <li key={task.name}>{task.name}-{task.done.toString()}-{task.dateCreated}</li>)}
+      </ul>
       <p>Tasks of earlier days:</p>
       {tasks
-        .filter(task => task.done != false && task.date != '')
-        .map(task => <li key={task.id}>{task.name} - {task.date}</li>)}
+        .filter(task => task.done != false && task.dateCreated != dateToday)
+        .map(task => <li key={task.id}>{task.name} - {task.dateCreated} - {task.dateCompleted}</li>)}
       <hr />
       <NewTaskForm newTask={newTask} priority={priority} number={number}
         addNewTask={addNewTask} handleTaskChange={handleTaskChange}

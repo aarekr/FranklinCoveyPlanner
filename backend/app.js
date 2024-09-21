@@ -63,7 +63,8 @@ app.post('/api/tasks', (request, response, next) => {
     priority: body.priority,
     number: body.number,
     name: body.name,
-    date: body.date,
+    dateCreated: body.dateCreated,
+    dateCompleted: body.dateCompleted,
   })
   task.save()
     .then(result => {
@@ -79,8 +80,9 @@ app.put('/api/tasks/:id', (request, response, next) => {
     done: body.done,
     priority: body.priority,
     number: body.number,
-    name: body.name
-    // date needed here?
+    name: body.name,
+    dateCreated: body.dateCreated,
+    dateCompleted: body.dateCompleted,
   }
   Task.findByIdAndUpdate(request.params.id, task, { new: true })
     .then(result => {
