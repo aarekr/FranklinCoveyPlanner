@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import { Badge } from 'react-bootstrap';
 import taskService from '../services/tasks'
 
-const ModifyTaskModal = ({ id, name, priority, number, done, setToDone, text, tasks, setTasks }) => {
+const ModifyTaskModal = ({ id, name, priority, number, done, tasks, setTasks }) => {
   const [ showModal, setShowModal ] = useState(false);
   const [ newTaskName, setNewTaskName ] = useState('')
   const [ newTaskPriority, setNewTaskPriority ] = useState('')
@@ -80,7 +80,6 @@ const ModifyTaskModal = ({ id, name, priority, number, done, setToDone, text, ta
         <Modal.Body>Status: {done == 'true'
                 ? <Badge bg="success">done</Badge>
                 : <Badge bg="danger">undone</Badge>}</Modal.Body>
-        <Modal.Body><Button variant="primary" size="sm" onClick={() => setToDone(id)}>{text}</Button></Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleSaveAndClose}>Save Changes</Button>
           <Button variant="secondary" onClick={handleCloseWithoutSaving}>Cancel</Button>

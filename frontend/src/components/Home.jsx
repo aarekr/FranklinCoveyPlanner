@@ -72,70 +72,66 @@ const Home = () => {
         })
     }
     return (
-        <div className="container">
-        <h1>Franklin Covey Planner</h1>
-        <hr/>
-        <h3>Prioritized Daily Tasks List</h3> <br />
-        <h4>Today&apos;s tasks</h4>
-        <Table striped>
-            <tbody>
-            {tasks
-                .filter(task => task.done === false)
-                .sort((a,b) => a.number < b.number ? 1 : -1)
-                .sort((a,b) => a.priority > b.priority ? 1 : -1)
-                .map(task =>
-                <Task
-                    key={task.id}
-                    id={task.id}
-                    name={task.name}
-                    priority={task.priority}
-                    number={task.number}
-                    done={task.done.toString()}
-                    setToDone={setToDone}
-                    text={'mark done'}
-                    tasks={tasks}
-                    setTasks={setTasks}
-                />
-            )}
-            </tbody>
-        </Table><br />
-        <h4>Today&apos;s completed tasks</h4>
-        <Table striped>
-            <tbody>
-            {tasks
-                .filter(task => task.done === true && task.dateCompleted == dateToday)
-                .sort((a,b) => a.number < b.number ? 1 : -1)
-                .sort((a,b) => a.priority > b.priority ? 1 : -1)
-                .map(task =>
-                <Task
-                    key={task.id}
-                    id={task.id}
-                    name={task.name}
-                    priority={task.priority}
-                    number={task.number}
-                    done={task.done.toString()}
-                    setToDone={setToDone}
-                    text={'mark undone'}
-                    tasks={tasks}
-                    setTasks={setTasks}
-                />
-            )}
-            </tbody>
-        </Table>
-        <Notification message={message} />
-        <br />
-        <p>All tasks</p>
-        <ul>
-            {tasks.map(task => <li key={task.name}>{task.name}-{task.done.toString()}-{task.dateCreated}</li>)}
-        </ul>
-        <p>Tasks of earlier days:</p>
-        {tasks
-            .filter(task => task.done != false && task.dateCreated != dateToday)
-            .map(task => <li key={task.id}>{task.name} - {task.dateCreated} - {task.dateCompleted}</li>)}
-        <hr />
-        <NewTaskForm newTask={newTask} priority={priority} number={number}
-            addNewTask={addNewTask} handleTaskChange={handleTaskChange}
-            handlePriorityChange={handlePriorityChange} handleNumberChange={handleNumberChange} />
+        <div className="form-group row">
+            <br />
+            <div className="col-7">
+                <br />
+                <h3>Prioritized Daily Tasks List</h3> <br />
+                <h4>Today&apos;s tasks</h4>
+                <Table striped>
+                    <tbody>
+                    {tasks
+                        .filter(task => task.done === false)
+                        .sort((a,b) => a.number < b.number ? 1 : -1)
+                        .sort((a,b) => a.priority > b.priority ? 1 : -1)
+                        .map(task =>
+                        <Task
+                            key={task.id}
+                            id={task.id}
+                            name={task.name}
+                            priority={task.priority}
+                            number={task.number}
+                            done={task.done.toString()}
+                            setToDone={setToDone}
+                            text={'mark done'}
+                            tasks={tasks}
+                            setTasks={setTasks}
+                        />
+                    )}
+                    </tbody>
+                </Table><br />
+                <h4>Today&apos;s completed tasks</h4>
+                <Table striped>
+                    <tbody>
+                    {tasks
+                        .filter(task => task.done === true && task.dateCompleted == dateToday)
+                        .sort((a,b) => a.number < b.number ? 1 : -1)
+                        .sort((a,b) => a.priority > b.priority ? 1 : -1)
+                        .map(task =>
+                        <Task
+                            key={task.id}
+                            id={task.id}
+                            name={task.name}
+                            priority={task.priority}
+                            number={task.number}
+                            done={task.done.toString()}
+                            setToDone={setToDone}
+                            text={'mark undone'}
+                            tasks={tasks}
+                            setTasks={setTasks}
+                        />
+                    )}
+                    </tbody>
+                </Table>
+                <Notification message={message} />
+                <br />
+                <hr />
+            </div>
+            <div className="col-sm-3">
+                <NewTaskForm newTask={newTask} priority={priority} number={number}
+                    addNewTask={addNewTask} handleTaskChange={handleTaskChange}
+                    handlePriorityChange={handlePriorityChange} handleNumberChange={handleNumberChange} />
+            </div>
         </div>
     )
 }

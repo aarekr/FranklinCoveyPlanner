@@ -18,8 +18,7 @@ const Task = ({ id, name, priority, number, done, setToDone, text, tasks, setTas
             <td width="250" className="task">{name}</td>
             <td width="100" align="right">
                 <ModifyTaskModal id={id} name={name} priority={priority} number={number}
-                    done={done} setToDone={setToDone} text={text} tasks={tasks}
-                    setTasks={setTasks} />
+                    done={done} tasks={tasks} setTasks={setTasks} />
             </td>
         </tr>
    )

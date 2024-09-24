@@ -6,7 +6,7 @@ import TaskOld from "./TaskOld"
 const OldCompletedTasks = ({ tasks }) => {    
     return (
         <div>
-            <br /><h2>OLD COMPLETED</h2> <hr />
+            <br /><h2>Old completed tasks</h2> <hr />
             <Table striped>
                 <thead>
                     <tr>
@@ -33,7 +33,7 @@ const OldCompletedTasks = ({ tasks }) => {
                     />
                 )}
                 </tbody>
-        </Table><br />
+            </Table><br />
         </div>
     )
 }

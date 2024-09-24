@@ -26,6 +26,7 @@ const App = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto" style={{marginLeft: "200"}}>
+            <h1 style={{ color:'white' }}>Franklin Covey Planner</h1>
             <Nav.Link href="/" as="span">
               <Link style={padding} to="/">HOME</Link>
             </Nav.Link>
