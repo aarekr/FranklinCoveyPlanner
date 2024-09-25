@@ -4,9 +4,31 @@ import { Notification } from "./Notification"
 import Task from "./Task"
 import NewTaskForm from "./NewTaskForm"
 import { Table } from "react-bootstrap"
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 const Home = () => {
     const [ tasks, setTasks ] = useState([])
+    const getCompletedTasks = () => {
+        let completed = 0
+        let total = tasks.length
+        if (total == 0) {
+            return 0
+        }
+        for (let i=0; i<tasks.length; i++) {
+            if (tasks[i].dateCompleted != dateToday) {
+                continue
+            }
+            if (tasks[i].done == true) {
+                console.log('pvm: ', tasks[i].dateCompleted == dateToday, tasks[i].dateCompleted != dateToday)
+                completed++
+            }
+        }
+        console.log('getCompletedTasks: ', completed, total)
+        console.log('getCompletedTasks: ', completed, total, Number(completed/total))
+        return Number(100 * completed / total)
+    }
+
+    const [ doneTasksToday, setDoneTasksToday ] = useState(getCompletedTasks)
     const [ priority, setPriority ] = useState('')
     const [ number, setNumber ] = useState('')
     const [ newTask, setNewTask ] = useState('')
@@ -32,6 +54,9 @@ const Home = () => {
     }
     const handleNumberChange = (event) => {
         setNumber(event.target.value)
+    }
+    const handleCompletedTasksChange = () => {
+        setDoneTasksToday(getCompletedTasks)
     }
     const addNewTask = (event) => {
         event.preventDefault()
@@ -62,15 +87,18 @@ const Home = () => {
         const task = tasks.find(t => t.id === id)
         const changedTask = { ...task, done: !task.done, dateCompleted: dateToday}
         taskService
-        .update(id, changedTask)
-        .then(response => {
-            setTasks(tasks.map(task => task.id !== id ? task : response.data))
-            task.done ? setMessage(`Task changed to: undone`) : setMessage(`Task changed to: done`)
-            setTimeout(() => {
-            setMessage(null)
-            }, 3000)
-        })
+            .update(id, changedTask)
+            .then(response => {
+                setTasks(tasks.map(task => task.id !== id ? task : response.data))
+                task.done ? setMessage(`Task changed to: undone`) : setMessage(`Task changed to: done`)
+                setTimeout(() => {
+                    setMessage(null)
+                }, 3000)
+                handleCompletedTasksChange
+                setDoneTasksToday(getCompletedTasks)
+            })
     }
+
     return (
         <div className="form-group row">
             <br />
@@ -78,6 +106,12 @@ const Home = () => {
                 <br />
                 <h3>Prioritized Daily Tasks List</h3> <br />
                 <h4>Today&apos;s tasks</h4>
+                <ProgressBar now={doneTasksToday} label={`${doneTasksToday}%`} />
+                <ProgressBar>
+                    <ProgressBar variant="success" now={doneTasksToday} label={`${doneTasksToday}%`} />
+                    <ProgressBar variant="warning" now={20} key={2} />
+                    <ProgressBar variant="danger" now={100-doneTasksToday-20} key={3} />
+                </ProgressBar>
                 <Table striped>
                     <tbody>
                     {tasks
