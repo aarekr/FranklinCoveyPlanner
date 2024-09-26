@@ -60,6 +60,7 @@ app.post('/api/tasks', (request, response, next) => {
   }
   const task = new Task({
     done: body.done,
+    started: body.started,
     priority: body.priority,
     number: body.number,
     name: body.name,
@@ -78,6 +79,7 @@ app.put('/api/tasks/:id', (request, response, next) => {
   const body = request.body
   const task = {
     done: body.done,
+    started: body.started,
     priority: body.priority,
     number: body.number,
     name: body.name,

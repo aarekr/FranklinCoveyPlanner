@@ -62,14 +62,15 @@ const Home = () => {
         event.preventDefault()
         const taskObject = {
         done: false,
+        started: false,
         priority: priority,
         number: number,
         name: newTask,
         dateCreated: dateToday,
         dateCompleted: 'NA',
         }
-        console.log("taskObject: ", taskObject.done, taskObject.priority, taskObject.number, 
-        taskObject.name, taskObject.dateCreated, taskObject.dateCompleted)
+        console.log("taskObject: ", taskObject.done, taskObject.started, taskObject.priority, 
+            taskObject.number, taskObject.name, taskObject.dateCreated, taskObject.dateCompleted)
         taskService
         .create(taskObject)
         .then(response => {
@@ -85,7 +86,7 @@ const Home = () => {
     }
     const setToDone = (id) => {
         const task = tasks.find(t => t.id === id)
-        const changedTask = { ...task, done: !task.done, dateCompleted: dateToday}
+        const changedTask = { ...task, done: !task.done, dateCompleted: dateToday }
         taskService
             .update(id, changedTask)
             .then(response => {
@@ -96,6 +97,28 @@ const Home = () => {
                 }, 3000)
                 handleCompletedTasksChange
                 setDoneTasksToday(getCompletedTasks)
+            })
+    }
+    const setToStarted = (id) => {
+        const task = tasks.find(t => t.id === id)
+        const changedTask = { ...task, started: !task.started }
+        taskService
+            .update(id, changedTask)
+            .then(response => {
+                setTasks(tasks.map(task => task.id !== id ? task : response.data))
+                if (task.done != true) {
+                    task.started 
+                        ? setMessage(`Task changed back to not started`) 
+                        : setMessage('Task started')
+                    setTimeout(() => {
+                        setMessage(null)
+                    }, 3000)
+                } else if (task.done == true) {
+                    setMessage(`You have completed this task and it can't be started`)
+                    setTimeout(() => {
+                        setMessage(null)
+                    }, 3000)
+                }
             })
     }
 
@@ -127,7 +150,9 @@ const Home = () => {
                             number={task.number}
                             done={task.done.toString()}
                             setToDone={setToDone}
-                            text={'mark done'}
+                            started={task.started}
+                            setToStarted={setToStarted}
+                            textDone={'done'}
                             tasks={tasks}
                             setTasks={setTasks}
                         />
@@ -150,7 +175,9 @@ const Home = () => {
                             number={task.number}
                             done={task.done.toString()}
                             setToDone={setToDone}
-                            text={'mark undone'}
+                            started={task.started}
+                            setToStarted={setToStarted}
+                            textDone={'undone'}
                             tasks={tasks}
                             setTasks={setTasks}
                         />

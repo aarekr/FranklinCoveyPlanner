@@ -13,6 +13,7 @@ mongoose.connect(config.MONGODB_URI)
 
 const taskSchema = new mongoose.Schema({
   done: Boolean,
+  started: Boolean,
   priority: {
     type: String,
     minlength: 1,
