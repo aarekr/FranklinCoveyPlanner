@@ -27,7 +27,6 @@ const Task = ({ id, name, priority, number, done, setToDone, started, setToStart
 }
 
 const GetStatusBadge = ({ done, started }) => {
-    console.log('GetStatusBadge, done, status: ', done, started)
     if (done == 'true') {
         return <Badge bg="success">done</Badge>
     } else if (started == true) {

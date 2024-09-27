@@ -60,14 +60,26 @@ const Home = () => {
     }
     const addNewTask = (event) => {
         event.preventDefault()
+        if (newTask.length < 3) {
+            alert(`Minimum length of a task is 3 characters`)
+            return
+        }
+        if (priority.length != 1 || !(priority == 'A' || priority == 'B' || priority == 'C' || priority == 'D')) {
+            alert(`Priority can only have one of these letters: A, B, C, D`)
+            return
+        }
+        if (number < 1 || number.length > 2 || isNaN(number)) {
+            alert(`Only numbers (1-99) accepted in this field`)
+            return
+        }
         const taskObject = {
-        done: false,
-        started: false,
-        priority: priority,
-        number: number,
-        name: newTask,
-        dateCreated: dateToday,
-        dateCompleted: 'NA',
+            done: false,
+            started: false,
+            priority: priority,
+            number: number,
+            name: newTask,
+            dateCreated: dateToday,
+            dateCompleted: 'NA',
         }
         console.log("taskObject: ", taskObject.done, taskObject.started, taskObject.priority, 
             taskObject.number, taskObject.name, taskObject.dateCreated, taskObject.dateCompleted)
@@ -94,6 +106,8 @@ const Home = () => {
                 task.done ? setMessage(`Task changed to: undone`) : setMessage(`Task changed to: done`)
                 setTimeout(() => {
                     setMessage(null)
+                    handleCompletedTasksChange
+                    setDoneTasksToday(getCompletedTasks)
                 }, 3000)
                 handleCompletedTasksChange
                 setDoneTasksToday(getCompletedTasks)
