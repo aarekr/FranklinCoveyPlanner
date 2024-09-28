@@ -6,7 +6,7 @@ import ModifyTaskModal from './ModifyTaskModal'
 
 const Task = ({ id, name, priority, number, done, setToDone, started, setToStarted, textDone, 
     tasks, setTasks }) => {
-    console.log("Task started: ", name, started)
+    //console.log("Task started: ", name, started)
 
     return (
         <tr className="task">

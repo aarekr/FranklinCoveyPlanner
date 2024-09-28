@@ -10,29 +10,46 @@ const Home = () => {
     const [ tasks, setTasks ] = useState([])
     const getCompletedTasks = () => {
         let completed = 0
+        let started = 0
         let total = tasks.length
         if (total == 0) {
             return 0
         }
         for (let i=0; i<tasks.length; i++) {
+            if (tasks[i].started == true) {
+                started++
+            }
             if (tasks[i].dateCompleted != dateToday) {
                 continue
             }
             if (tasks[i].done == true) {
-                console.log('pvm: ', tasks[i].dateCompleted == dateToday, tasks[i].dateCompleted != dateToday)
+                //console.log('pvm: ', tasks[i].dateCompleted == dateToday, tasks[i].dateCompleted != dateToday)
                 completed++
             }
         }
-        console.log('getCompletedTasks: ', completed, total)
-        console.log('getCompletedTasks: ', completed, total, Number(completed/total))
-        return Number(100 * completed / total)
+        let startedPercentage = Number((100*started/total).toFixed(2))
+        console.log('getStartedTasks  : ', started, total, startedPercentage)
+        let completedPercentage = Number((100*completed/total).toFixed(2))
+        console.log('getCompletedTasks: ', completed, total, completedPercentage)
+        return completedPercentage
     }
 
-    const [ doneTasksToday, setDoneTasksToday ] = useState(getCompletedTasks)
+    const updateCompletedTasks = () => {
+        setTimeout(() => {
+            setDoneTasksToday(getCompletedTasks)
+        }, 1000)
+    }
+
+    const [ doneTasksToday, setDoneTasksToday ] = useState(updateCompletedTasks)
+    const [ startedTasksToday, setStartedTasksToday ] = useState(20)
     const [ priority, setPriority ] = useState('')
     const [ number, setNumber ] = useState('')
     const [ newTask, setNewTask ] = useState('')
     const [ message, setMessage ] = useState('')
+
+    setTimeout(() => {
+        setDoneTasksToday(getCompletedTasks)
+    }, 500)
 
     const now = new Date()
     const dateSplit = now.toString().split(" ")
@@ -40,10 +57,10 @@ const Home = () => {
 
     useEffect(() => {
         taskService
-        .getAll()
-        .then(response => {
-            setTasks(response.data)
-        })
+            .getAll()
+            .then(response => {
+                setTasks(response.data)
+            })
     }, [])
 
     const handleTaskChange = (event) => {
@@ -55,9 +72,9 @@ const Home = () => {
     const handleNumberChange = (event) => {
         setNumber(event.target.value)
     }
-    const handleCompletedTasksChange = () => {
+    /*const handleCompletedTasksChange = () => {
         setDoneTasksToday(getCompletedTasks)
-    }
+    }*/
     const addNewTask = (event) => {
         event.preventDefault()
         if (newTask.length < 3) {
@@ -84,21 +101,23 @@ const Home = () => {
         console.log("taskObject: ", taskObject.done, taskObject.started, taskObject.priority, 
             taskObject.number, taskObject.name, taskObject.dateCreated, taskObject.dateCompleted)
         taskService
-        .create(taskObject)
-        .then(response => {
-            setTasks(tasks.concat(response.data))
-            setMessage('New task added to the list')
-            setTimeout(() => {
-            setMessage(null)
-            }, 3000)
-            setPriority('')
-            setNumber('')
-            setNewTask('')
+            .create(taskObject)
+            .then(response => {
+                setTasks(tasks.concat(response.data))
+                setMessage('New task added to the list')
+                setTimeout(() => {
+                setMessage(null)
+                }, 3000)
+                setPriority('')
+                setNumber('')
+                setNewTask('')
         })
+        //setDoneTasksToday(getCompletedTasks)
+        updateCompletedTasks
     }
     const setToDone = (id) => {
         const task = tasks.find(t => t.id === id)
-        const changedTask = { ...task, done: !task.done, dateCompleted: dateToday }
+        const changedTask = { ...task, done: !task.done, started: false, dateCompleted: dateToday }
         taskService
             .update(id, changedTask)
             .then(response => {
@@ -106,11 +125,7 @@ const Home = () => {
                 task.done ? setMessage(`Task changed to: undone`) : setMessage(`Task changed to: done`)
                 setTimeout(() => {
                     setMessage(null)
-                    handleCompletedTasksChange
-                    setDoneTasksToday(getCompletedTasks)
                 }, 3000)
-                handleCompletedTasksChange
-                setDoneTasksToday(getCompletedTasks)
             })
     }
     const setToStarted = (id) => {
@@ -133,6 +148,7 @@ const Home = () => {
                         setMessage(null)
                     }, 3000)
                 }
+                //setStartedTasksToday(startedTasksToday + 1)
             })
     }
 
@@ -146,8 +162,8 @@ const Home = () => {
                 <ProgressBar now={doneTasksToday} label={`${doneTasksToday}%`} />
                 <ProgressBar>
                     <ProgressBar variant="success" now={doneTasksToday} label={`${doneTasksToday}%`} />
-                    <ProgressBar variant="warning" now={20} key={2} />
-                    <ProgressBar variant="danger" now={100-doneTasksToday-20} key={3} />
+                    <ProgressBar variant="warning" now={startedTasksToday} />
+                    <ProgressBar variant="danger" now={100-doneTasksToday-startedTasksToday} />
                 </ProgressBar>
                 <Table striped>
                     <tbody>

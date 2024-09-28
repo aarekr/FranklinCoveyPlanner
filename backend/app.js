@@ -101,6 +101,11 @@ app.delete('/api/tasks/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+/*if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}*/
+
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
