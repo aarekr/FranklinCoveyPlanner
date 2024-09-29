@@ -152,5 +152,7 @@ describe('Task app', () => {
         //await expect(page.getByText('Modal opens and closes')).toBeVisible()
     })
 
+    // write tests for task modifications
+
     // write tests when several tasks are on the lists
 })

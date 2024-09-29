@@ -1,17 +1,32 @@
-# FranklinCoveyPlanner
+# Franklin Covey Planner
 
 Time management application
 
-* Frontend: React
-* Backend: Node.js
-* Database: MongoDB
-* UI-framework: Bootstrap
-* Frontend testing: Vitest
-* Backend testing: SuperTest
-* End-to-end testing: Playwright
+| Function             | Tool          |
+|----------------------|---------------|
+| Frontend             | React         |
+| Backend              | Node.js       |
+| Database             | MongoDB       |
+| UI-framework         | Bootstrap     |
+| Frontend testing     | Vitest        |
+| Backend testing      | SuperTest     |
+| End-to-end testing   | Playwright    |
+
 
 ## Testing
 #### Frontend:
+* Vitest:
+```bash
+npm test
+```
+* Vitest UI (recommended):
+```bash
+npm run test:ui
+```
+* Coverage:
+```bash
+npm run coverage
+```
 
 #### Backend:
 * SuperTest:
