@@ -3,7 +3,6 @@ import taskService from '../services/tasks'
 import { Notification } from "./Notification"
 import Task from "./Task"
 import NewTaskForm from "./NewTaskForm"
-import { Table } from "react-bootstrap"
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 const Home = () => {
@@ -165,55 +164,21 @@ const Home = () => {
                     <ProgressBar variant="warning" now={startedTasksToday} />
                     <ProgressBar variant="danger" now={100-doneTasksToday-startedTasksToday} />
                 </ProgressBar>
-                <Table striped>
-                    <tbody>
-                    {tasks
-                        .filter(task => task.done === false)
-                        .sort((a,b) => a.number < b.number ? 1 : -1)
-                        .sort((a,b) => a.priority > b.priority ? 1 : -1)
-                        .map(task =>
-                        <Task
-                            key={task.id}
-                            id={task.id}
-                            name={task.name}
-                            priority={task.priority}
-                            number={task.number}
-                            done={task.done.toString()}
-                            setToDone={setToDone}
-                            started={task.started}
-                            setToStarted={setToStarted}
-                            textDone={'done'}
-                            tasks={tasks}
-                            setTasks={setTasks}
-                        />
-                    )}
-                    </tbody>
-                </Table><br />
+                <Task
+                    tasks={tasks.filter(task => task.done === false)}
+                    setToDone={setToDone}
+                    setToStarted={setToStarted}
+                    textDone={'done'}
+                    setTasks={setTasks}
+                />
                 <h4>Today&apos;s completed tasks</h4>
-                <Table striped>
-                    <tbody>
-                    {tasks
-                        .filter(task => task.done === true && task.dateCompleted == dateToday)
-                        .sort((a,b) => a.number < b.number ? 1 : -1)
-                        .sort((a,b) => a.priority > b.priority ? 1 : -1)
-                        .map(task =>
-                        <Task
-                            key={task.id}
-                            id={task.id}
-                            name={task.name}
-                            priority={task.priority}
-                            number={task.number}
-                            done={task.done.toString()}
-                            setToDone={setToDone}
-                            started={task.started}
-                            setToStarted={setToStarted}
-                            textDone={'undone'}
-                            tasks={tasks}
-                            setTasks={setTasks}
-                        />
-                    )}
-                    </tbody>
-                </Table>
+                <Task
+                    tasks={tasks.filter(task => task.done === true && task.dateCompleted == dateToday)}
+                    setToDone={setToDone}
+                    setToStarted={setToStarted}
+                    textDone={'undone'}
+                    setTasks={setTasks}
+                />
                 <Notification message={message} />
                 <br />
                 <hr />

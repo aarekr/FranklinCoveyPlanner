@@ -14,23 +14,26 @@ const NewTaskForm = ({ newTask, priority, number, addNewTask, handleTaskChange,
               <Form.Label>Task:</Form.Label>
               <Form.Control
                 data-testid='taskname'
+                role='taskname'
                 value={newTask}
                 onChange={handleTaskChange}
               />
               <Form.Label>Priority:</Form.Label>
               <Form.Control
                 data-testid='priority'
+                role='priority'
                 value={priority}
                 onChange={handlePriorityChange}
               />
               <Form.Label>Number:</Form.Label>
               <Form.Control
                 data-testid='number'
+                role='number'
                 value={number}
                 onChange={handleNumberChange}
               />
             </Form.Group><br />
-            <Button variant="primary" type="submit">Add task</Button>
+            <Button variant="primary" type="submit" role='addTaskButton'>Add task</Button>
           </Form>
         </div>
       </div>

@@ -1,4 +1,5 @@
-/* eslint-disable no-unused-vars, no-undef */
+/* eslint-disable no-undef */
+// no-unused-vars
 
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -38,7 +39,7 @@ test('Task name, priority, number, done rendered correctly', async () => {
   expect(elementPriority).toBeDefined()
   const elementNumber = screen.getByText('1')
   expect(elementNumber).toBeDefined()
-  //const elementDone = screen.getByButton('done')
+  //const elementDone = screen.getText('done')
   //expect(elementDone).toBeDefined()
 })
 
@@ -59,4 +60,48 @@ test('Adding new tasks', async () => {
   const user = userEvent.setup()
   const addButton = screen.getByText('Add task')
   await user.click(addButton)
+})
+
+/*test('clicking a button calls event handler once', async () => {
+  const task = {
+    done: 'false',
+    priority: 'A',
+    number: 1,
+    name: 'Button click',
+  }
+
+  const mockHandler = vi.fn()
+
+  //render(<Task setToDone={App.setToDone} done={task.done} priority={task.priority} number={task.number}
+  //  name={task.name} text={'done'} />)
+  
+  render(<NewTaskForm />)
+  
+  const user = userEvent.setup()
+  const button = screen.getByText('Add task')
+  await user.click(button)
+
+  expect(mockHandler.mock.calls).toHaveLength(1)
+})*/
+
+test('<NewTaskForm /> creates a new task', async () => {
+  const user = userEvent.setup()
+  const createTask = vi.fn()
+
+  render(<NewTaskForm createTask={createTask} />)
+
+  const inputName = screen.getByRole('taskname')
+  const inputPriority = screen.getByRole('priority')
+  const inputNumber = screen.getByRole('number')
+  const addTaskButton = screen.getByRole('addTaskButton')
+
+  await user.type(inputName, 'Vitest')
+  await user.type(inputPriority, 'A')
+  await user.type(inputNumber, "2")
+  await user.click(addTaskButton)
+
+  //expect(createTask.mock.calls).toHaveLength(1)
+  console.log("---> ", createTask.mock.calls[0].name)
+  createTask.mock.calls[0].map(task => console.log(task))
+  expect(createTask.mock.calls[0][0].name).toBe('Vitest')
 })
