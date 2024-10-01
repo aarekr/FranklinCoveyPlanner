@@ -7,40 +7,33 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 
 const Home = () => {
     const [ tasks, setTasks ] = useState([])
+    const [ notDoneNotStartedTasksToday, setNotDoneNotStartedTasksToday ] = useState(0)
+    const [ startedTasksToday, setStartedTasksToday ] = useState(0)
+    const [ doneTasksToday, setDoneTasksToday ] = useState(0)
+
     const getCompletedTasks = () => {
-        let completed = 0
         let started = 0
-        let total = tasks.length
-        if (total == 0) {
+        let completed = 0
+        let total = 0
+        if (tasks.length == 0) {
             return 0
         }
         for (let i=0; i<tasks.length; i++) {
-            if (tasks[i].started == true) {
-                started++
-            }
-            if (tasks[i].dateCompleted != dateToday) {
-                continue
-            }
-            if (tasks[i].done == true) {
-                //console.log('pvm: ', tasks[i].dateCompleted == dateToday, tasks[i].dateCompleted != dateToday)
+            if (tasks[i].done == true && tasks[i].dateCompleted == dateToday) {
                 completed++
+                total++
+            } else if (tasks[i].done == false && tasks[i].started == false) {
+                total++
+            } else if (tasks[i].done == false && tasks[i].started == true) {
+                started++
+                total++
             }
         }
-        let startedPercentage = Number((100*started/total).toFixed(2))
-        console.log('getStartedTasks  : ', started, total, startedPercentage)
-        let completedPercentage = Number((100*completed/total).toFixed(2))
-        console.log('getCompletedTasks: ', completed, total, completedPercentage)
-        return completedPercentage
+        setNotDoneNotStartedTasksToday(Number((100*(total - started - completed)/total).toFixed(2)))
+        setStartedTasksToday(Number((100*started/total).toFixed(2)))
+        return Number((100*completed/total).toFixed(2))
     }
 
-    const updateCompletedTasks = () => {
-        setTimeout(() => {
-            setDoneTasksToday(getCompletedTasks)
-        }, 1000)
-    }
-
-    const [ doneTasksToday, setDoneTasksToday ] = useState(updateCompletedTasks)
-    const [ startedTasksToday, setStartedTasksToday ] = useState(20)
     const [ priority, setPriority ] = useState('')
     const [ number, setNumber ] = useState('')
     const [ newTask, setNewTask ] = useState('')
@@ -111,8 +104,6 @@ const Home = () => {
                 setNumber('')
                 setNewTask('')
         })
-        //setDoneTasksToday(getCompletedTasks)
-        updateCompletedTasks
     }
     const setToDone = (id) => {
         const task = tasks.find(t => t.id === id)
@@ -147,7 +138,6 @@ const Home = () => {
                         setMessage(null)
                     }, 3000)
                 }
-                //setStartedTasksToday(startedTasksToday + 1)
             })
     }
 
@@ -157,13 +147,16 @@ const Home = () => {
             <div className="col-7">
                 <br />
                 <h3>Prioritized Daily Tasks List</h3> <br />
+                Progress: 
+                {notDoneNotStartedTasksToday == 0.0 && doneTasksToday == 0.0 && startedTasksToday == 0.0
+                    ? null
+                    : <ProgressBar>
+                        <ProgressBar variant="success" now={doneTasksToday} label={`${doneTasksToday}%`} />
+                        <ProgressBar variant="warning" now={startedTasksToday} label={`${doneTasksToday}%`} />
+                        <ProgressBar variant="danger" now={notDoneNotStartedTasksToday}
+                                    label={`${notDoneNotStartedTasksToday}%`} />
+                      </ProgressBar>} <br />
                 <h4>Today&apos;s tasks</h4>
-                <ProgressBar now={doneTasksToday} label={`${doneTasksToday}%`} />
-                <ProgressBar>
-                    <ProgressBar variant="success" now={doneTasksToday} label={`${doneTasksToday}%`} />
-                    <ProgressBar variant="warning" now={startedTasksToday} />
-                    <ProgressBar variant="danger" now={100-doneTasksToday-startedTasksToday} />
-                </ProgressBar>
                 <Task
                     tasks={tasks.filter(task => task.done === false)}
                     setToDone={setToDone}
