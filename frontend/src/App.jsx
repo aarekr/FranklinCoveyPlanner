@@ -17,7 +17,7 @@ const App = () => {
   }, [])
 
   const padding = {
-    padding: 5
+    padding: 10
   }
 
   return(

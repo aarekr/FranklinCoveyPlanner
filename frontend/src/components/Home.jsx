@@ -64,9 +64,7 @@ const Home = () => {
     const handleNumberChange = (event) => {
         setNumber(event.target.value)
     }
-    /*const handleCompletedTasksChange = () => {
-        setDoneTasksToday(getCompletedTasks)
-    }*/
+
     const addNewTask = (event) => {
         event.preventDefault()
         if (newTask.length < 3) {
@@ -147,16 +145,16 @@ const Home = () => {
             <div className="col-7">
                 <br />
                 <h3>Prioritized Daily Tasks List</h3> <br />
-                Progress: 
+                <h6>Progress: </h6>
                 {notDoneNotStartedTasksToday == 0.0 && doneTasksToday == 0.0 && startedTasksToday == 0.0
                     ? null
                     : <ProgressBar>
                         <ProgressBar variant="success" now={doneTasksToday} label={`${doneTasksToday}%`} />
-                        <ProgressBar variant="warning" now={startedTasksToday} label={`${doneTasksToday}%`} />
+                        <ProgressBar variant="warning" now={startedTasksToday} label={`${startedTasksToday}%`} />
                         <ProgressBar variant="danger" now={notDoneNotStartedTasksToday}
                                     label={`${notDoneNotStartedTasksToday}%`} />
                       </ProgressBar>} <br />
-                <h4>Today&apos;s tasks</h4>
+                <h4>Today&apos;s to do tasks</h4>
                 <Task
                     tasks={tasks.filter(task => task.done === false)}
                     setToDone={setToDone}

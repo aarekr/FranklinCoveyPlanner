@@ -6,7 +6,7 @@ import Badge from 'react-bootstrap/Badge'
 import ModifyTaskModal from './ModifyTaskModal'
 
 const Task = ({ tasks, setToDone, setToStarted, textDone, setTasks }) => {
-    console.log("Tasks: ", tasks)
+    //console.log("Tasks: ", tasks)
     return (
         <div>
             <Table striped>
@@ -38,7 +38,7 @@ const Task = ({ tasks, setToDone, setToStarted, textDone, setTasks }) => {
 }
 
 const StartButton = ({ task, setToStarted }) => {
-    console.log('task.done: ', task.done)
+    //console.log('task.done: ', task.done)
     if (!task.done && task.started) {
         return (<td width="70" valign="center">
             <Button variant="info" size="sm" onClick={() => setToStarted(task.id)}>reset</Button></td>)
@@ -50,7 +50,7 @@ const StartButton = ({ task, setToStarted }) => {
 }
 
 const GetStatusBadge = ({ done, started }) => {
-    console.log('GetStatusBadge done: ', done)
+    //console.log('GetStatusBadge done: ', done)
     if (done == true) {
         return <Badge bg="success">done</Badge>
     } else if (started == true) {
