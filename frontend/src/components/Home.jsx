@@ -10,6 +10,7 @@ const Home = () => {
     const [ notDoneNotStartedTasksToday, setNotDoneNotStartedTasksToday ] = useState(0)
     const [ startedTasksToday, setStartedTasksToday ] = useState(0)
     const [ doneTasksToday, setDoneTasksToday ] = useState(0)
+    const [ modalUpdate, setModalUpdate ] = useState(false)
 
     const getCompletedTasks = () => {
         let started = 0
@@ -28,6 +29,14 @@ const Home = () => {
                 started++
                 total++
             }
+        }
+        if (modalUpdate == true) {
+            taskService
+            .getAll()
+            .then(response => {
+                setTasks(response.data)
+            })
+            setModalUpdate(false)
         }
         setNotDoneNotStartedTasksToday(Number((100*(total - started - completed)/total).toFixed(2)))
         setStartedTasksToday(Number((100*started/total).toFixed(2)))
@@ -96,7 +105,7 @@ const Home = () => {
                 setTasks(tasks.concat(response.data))
                 setMessage('New task added to the list')
                 setTimeout(() => {
-                setMessage(null)
+                    setMessage(null)
                 }, 3000)
                 setPriority('')
                 setNumber('')
@@ -153,7 +162,7 @@ const Home = () => {
                         <ProgressBar variant="warning" now={startedTasksToday} label={`${startedTasksToday}%`} />
                         <ProgressBar variant="danger" now={notDoneNotStartedTasksToday}
                                     label={`${notDoneNotStartedTasksToday}%`} />
-                      </ProgressBar>} <br />
+                    </ProgressBar>} <br />
                 <h4>Today&apos;s to do tasks</h4>
                 <Task
                     tasks={tasks.filter(task => task.done === false)}
@@ -161,6 +170,7 @@ const Home = () => {
                     setToStarted={setToStarted}
                     textDone={'done'}
                     setTasks={setTasks}
+                    setModalUpdate={setModalUpdate}
                 />
                 <h4>Today&apos;s completed tasks</h4>
                 <Task
@@ -169,6 +179,7 @@ const Home = () => {
                     setToStarted={setToStarted}
                     textDone={'undone'}
                     setTasks={setTasks}
+                    setModalUpdate={setModalUpdate}
                 />
                 <Notification message={message} />
                 <br />

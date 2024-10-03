@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import { Badge } from 'react-bootstrap';
 import taskService from '../services/tasks'
 
-const ModifyTaskModal = ({ id, name, priority, number, done, tasks, setTasks }) => {
+const ModifyTaskModal = ({ id, name, priority, number, done, tasks, setTasks, setModalUpdate }) => {
   const [ showModal, setShowModal ] = useState(false);
   const [ newTaskName, setNewTaskName ] = useState('')
   const [ newTaskPriority, setNewTaskPriority ] = useState('')
@@ -16,6 +16,9 @@ const ModifyTaskModal = ({ id, name, priority, number, done, tasks, setTasks }) 
   const handleSaveAndClose = () => {
     console.log("saving and closing: ")
     changeTaskItems(newTaskName, newTaskPriority, newTaskNumber)
+    setTimeout(() => {
+      setModalUpdate(true)
+    }, 1000)
     setShowModal(false)
   }
   const handleCloseWithoutSaving = () => {
