@@ -11,15 +11,20 @@ const ModifyTaskModal = ({ id, name, priority, number, done, tasks, setTasks, se
   const [ newTaskName, setNewTaskName ] = useState('')
   const [ newTaskPriority, setNewTaskPriority ] = useState('')
   const [ newTaskNumber, setNewTaskNumber ] = useState('')
+  const [ saveChangesButtonText, setSaveChangesButtonText ] = useState('Save changes')
   const handleShow = () => setShowModal(true);
 
   const handleSaveAndClose = () => {
     console.log("saving and closing: ")
     changeTaskItems(newTaskName, newTaskPriority, newTaskNumber)
+    setModalUpdate(true)
+    setSaveChangesButtonText('Saving...')
     setTimeout(() => {
-      setModalUpdate(true)
+      setShowModal(false)
+      setTimeout(() => {
+        setSaveChangesButtonText('Save changes')
+      }, 1000)
     }, 1000)
-    setShowModal(false)
   }
   const handleCloseWithoutSaving = () => {
     console.log("closing without saving")
@@ -84,7 +89,7 @@ const ModifyTaskModal = ({ id, name, priority, number, done, tasks, setTasks, se
                 ? <Badge bg="success">done</Badge>
                 : <Badge bg="danger">undone</Badge>}</Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleSaveAndClose}>Save Changes</Button>
+          <Button variant="primary" onClick={handleSaveAndClose}>{saveChangesButtonText}</Button>
           <Button variant="secondary" onClick={handleCloseWithoutSaving}>Cancel</Button>
           <Button variant="danger" onClick={() => handleDeleteAndClose(id)}>Delete task</Button>
         </Modal.Footer>
