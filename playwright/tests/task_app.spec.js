@@ -1,6 +1,6 @@
 const { test, describe, expect, beforeEach } = require('@playwright/test')
 
-describe('Task app', () => {
+describe('Home page', () => {
     beforeEach(async ({ page }) => {
         //await request.post('http:localhost:3001/api/testing/reset')
         await page.goto('http://localhost:5173')
@@ -10,9 +10,18 @@ describe('Task app', () => {
         const locator = await page.getByText('Franklin Covey Planner')
         await expect(locator).toBeVisible()
         await expect(page.getByText('Prioritized Daily Tasks List')).toBeVisible()
-        await expect(page.getByText('Today\'s tasks')).toBeVisible()
+        await expect(page.getByText('Today\'s to do tasks')).toBeVisible()
         await expect(page.getByText('Today\'s completed tasks')).toBeVisible()
         await expect(page.getByText('Add new tasks')).toBeVisible()
+    })
+
+    test('user can navigate to old tasks page by clicking the navbar link', async ({ page }) => {
+        await page.getByRole('link', { name: 'OLD TASKS' }).click()
+        await expect(page.getByText('Prioritized Daily Tasks List')).not.toBeVisible()
+        await expect(page.getByText(`Today's to do tasks`)).not.toBeVisible()
+        await expect(page.getByText(`Today's completed tasks`)).not.toBeVisible()
+        await expect(page.getByText(`Add new tasks`)).not.toBeVisible()
+        await expect(page.getByText('Old completed tasks')).toBeVisible()
     })
 
     test('a new task can be added with correct data', async ({ page }) => {

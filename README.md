@@ -14,8 +14,8 @@ Time management application
 
 
 ## Testing
-#### Frontend:
-* Vitest:
+#### Frontend: Viteste
+* Run tests in frontend directory with:
 ```bash
 npm test
 ```
@@ -28,8 +28,8 @@ npm run test:ui
 npm run coverage
 ```
 
-#### Backend:
-* SuperTest:
+#### Backend: Supertest
+* Run tests in backend directory with:
 ```bash
 npm test
 ```
@@ -39,7 +39,7 @@ npm test
 ```bash
 npm test -- --project chromium
 ```
-* Create report with:
+* Create reports with:
 ```bash
 npx playwright show-report
 ```
