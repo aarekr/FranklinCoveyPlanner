@@ -28,11 +28,9 @@ const taskSchema = new mongoose.Schema({
   },
   dateCreated: {
     type: String,
-    required: true,
   },
   dateCompleted: {
     type: String,
-    required: true,
   }
 })
 

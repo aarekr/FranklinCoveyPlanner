@@ -77,6 +77,28 @@ describe('new tasks can be added with right credentials', async () => {
     assert(names.includes('C++ Module 5'))
   })
 
+  test('two new tasks can be added', async () => {
+    let newTaskObject1 = new Task({
+      done: 'false',
+      priority: 'A',
+      number: 2,
+      name: 'Big Data Platforms exercise ML'
+    })
+    await newTaskObject1.save()
+    let newTaskObject2 = new Task({
+      done: 'false',
+      priority: 'C',
+      number: 3,
+      name: 'Tie koodariksi part 16'
+    })
+    await newTaskObject2.save()
+    const response = await api.get('/api/tasks')
+    const names = response.body.map(e => e.name)
+    assert.strictEqual(response.body.length, initialTasks.length + 2)
+    assert(names.includes('Big Data Platforms exercise ML'))
+    assert(names.includes('Tie koodariksi part 16'))
+  })
+
   test('a new task without task name is not added', async () => {
     let newTaskObject = new Task({
       done: 'false',
@@ -123,6 +145,91 @@ describe('new tasks can be added with right credentials', async () => {
     const names = response.body.map(e => e.name)
     assert.strictEqual(response.body.length, initialTasks.length)
     assert(!names.includes('Task without number'))
+  })
+
+  test('only tasks with required fields are added', async() => {
+    let newTaskObject1 = new Task({
+      done: 'false',
+      priority: 'D',
+      number: 3,
+      name: 'All required fields given'
+    })
+    let newTaskObject2 = new Task({
+      done: 'false',
+      priority: '',
+      number: 3,
+      name: 'Missing priority task'
+    })
+    let newTaskObject3 = new Task({
+      done: 'false',
+      priority: 'C',
+      number: '',
+      name: 'Missing number task'
+    })
+    await newTaskObject1.save()
+    await api
+      .post('/api/tasks')
+      .send(newTaskObject2)
+      .expect(400)
+    await api
+      .post('/api/tasks')
+      .send(newTaskObject3)
+      .expect(400)
+    const response = await api.get('/api/tasks')
+    const names = response.body.map(e => e.name)
+    assert.strictEqual(response.body.length, initialTasks.length + 1)
+    assert(names.includes('All required fields given'))
+    assert(!names.includes('Missing priority task'))
+    assert(!names.includes('Missing number task'))
+  })
+})
+
+describe('tasks can be deleted ', async () => {
+  test('first task in db can be deleted', async() => {
+    const tasks = await Task.find({})
+    await tasks[0].deleteOne()
+    const response = await api.get('/api/tasks')
+    const names = response.body.map(e => e.name)
+    assert.strictEqual(response.body.length, initialTasks.length - 1)
+    assert(!names.includes('Java Spring Boot Security'))
+    assert(names.includes('C#.NET programming'))
+    assert(names.includes('Node backend testing'))
+  })
+
+  test('second task in db can be deleted', async() => {
+    const tasks = await Task.find({})
+    await tasks[1].deleteOne()
+    const response = await api.get('/api/tasks')
+    const names = response.body.map(e => e.name)
+    assert.strictEqual(response.body.length, initialTasks.length - 1)
+    assert(names.includes('Java Spring Boot Security'))
+    assert(!names.includes('C#.NET programming'))
+    assert(names.includes('Node backend testing'))
+  })
+
+  test('third task in db can be deleted', async() => {
+    const tasks = await Task.find({})
+    await tasks[2].deleteOne()
+    const response = await api.get('/api/tasks')
+    const names = response.body.map(e => e.name)
+    assert.strictEqual(response.body.length, initialTasks.length - 1)
+    assert(names.includes('Java Spring Boot Security'))
+    assert(names.includes('C#.NET programming'))
+    assert(!names.includes('Node backend testing'))
+  })
+
+  test('all 3 tasks in db can be deleted', async () => {
+    const tasks = await Task.find({})
+    await tasks[2].deleteOne()
+    await tasks[1].deleteOne()
+    await tasks[0].deleteOne()
+    // await Task.deleteMany({})  // or all at once
+    const response = await api.get('/api/tasks')
+    const names = response.body.map(e => e.name)
+    assert.strictEqual(response.body.length, 0)
+    assert(!names.includes('Java Spring Boot Security'))
+    assert(!names.includes('C#.NET programming'))
+    assert(!names.includes('Node backend testing'))
   })
 })
 

@@ -14,7 +14,7 @@ Time management application
 
 
 ## Testing
-#### Frontend: Viteste
+#### Frontend: Vitest
 * Run tests in frontend directory with:
 ```bash
 npm test
@@ -28,7 +28,7 @@ npm run test:ui
 npm run coverage
 ```
 
-#### Backend: Supertest
+#### Backend: SuperTest
 * Run tests in backend directory with:
 ```bash
 npm test
